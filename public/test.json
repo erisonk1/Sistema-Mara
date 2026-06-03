@@ -1,0 +1,51 @@
+{
+    "menu": [
+      {
+        "category": "Tapiocas / Cuscuz",
+        "items": [
+          { "name": "Manteiga", "price": 4.90 },
+          { "name": "Manteiga com capa de queijo", "price": 9.90 },
+          { "name": "Queijo", "price": 8.90 },
+          { "name": "Queijo com capa de queijo", "price": 13.90 },
+          { "name": "Ovo", "price": 7.00 },
+          { "name": "Ovo com capa de queijo", "price": 10.00 },
+          { "name": "Mista", "price": 9.90 },
+          { "name": "Mista com capa de queijo", "price": 13.90 },
+          { "name": "Mista com capa e requeijão", "price": 15.90 },
+          { "name": "Calabresa", "price": 7.90 },
+          { "name": "Calabresa com queijo", "price": 9.90 },
+          { "name": "Calabresa com ovo e queijo", "price": 13.90 },
+          { "name": "Calabresa com capa de queijo", "price": 12.90 },
+          { "name": "Calabresa com capa de queijo e requeijão", "price": 13.90 },
+          { "name": "Frango", "price": 9.90 },
+          { "name": "Frango com queijo", "price": 11.90 },
+          { "name": "Frango com queijo e requeijão", "price": 13.90 },
+          { "name": "Frango com capa de queijo", "price": 13.90 },
+          { "name": "Frango com capa de queijo e requeijão", "price": 15.90 },
+          { "name": "Carne do sol", "price": 13.90 },
+          { "name": "Carne do sol com queijo", "price": 14.90 },
+          { "name": "Carne do sol com queijo e requeijão", "price": 15.90 },
+          { "name": "Carne do sol com capa de queijo", "price": 17.90 },
+          { "name": "Carne do sol com capa de queijo e requeijão", "price": 18.90 },
+          { "name": "Doce de leite", "price": 7.90 },
+          { "name": "Doce de leite com queijo e coco", "price": 12.90 },
+          { "name": "Banoffee", "price": 12.90 },
+          { "name": "Leite condensado", "price": 7.90 }
+        ]
+      },
+      {
+        "category": "Pão na Chapa",
+        "items": [
+          { "name": "Misto", "price": 6.00 },
+          { "name": "Ovo", "price": 4.90 },
+          { "name": "Queijo", "price": 6.00 },
+          { "name": "Requeijão", "price": 6.00 },
+          { "name": "Queijo e ovo", "price": 7.50 },
+          { "name": "Frango", "price": 7.90 },
+          { "name": "Frango com queijo e requeijão", "price": 10.90 },
+          { "name": "Carne do sol", "price": 9.90 },
+          { "name": "Carne do sol com queijo e requeijão", "price": 12.90 }
+        ]
+      }
+    ]
+  }
