@@ -8,7 +8,7 @@
 //   onToggle={toggleItemSelecionado}
 // />
 
-import { ItemComanda } from "@/types/comanda";
+import { ItemComanda } from "@/app/components/files/comanda";
 
 type ItemListProps = {
   comandaId: number;
