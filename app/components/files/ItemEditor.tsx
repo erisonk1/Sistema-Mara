@@ -12,7 +12,7 @@
 //   onCancel={() => setEditando(null)}
 // />
 
-import { ItemComanda } from "@/types/comanda";
+import { ItemComanda } from "@/app/components/files/comanda";
 
 type ItemEditorProps = {
   comandaId: number;
