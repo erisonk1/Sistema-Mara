@@ -5,7 +5,7 @@
 //   printCozinha(comanda, itensSelecionados);
 //   printRecibo(comanda);
 
-import { Comanda } from "@/types/comanda";
+import { Comanda } from "@/app/components/files/comanda";
 
 export function printCozinha(
   comanda: Comanda,
