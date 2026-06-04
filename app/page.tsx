@@ -200,7 +200,7 @@ export default function Home() {
                       onChange={setNome}
                       onSelectCliente={(cliente) => {
                         setNome(cliente.nome);
-                        setTelefone(cliente.telefone);
+                      setTelefone(String(cliente.telefone));
                         setIdCliente(cliente.id ?? null);
                       }}
                     />
