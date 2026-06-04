@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-
+const API = process.env.NEXT_PUBLIC_API_URL ?? "https://sistema-mara-backend-1.onrender.com";
 export default function CadastroClientes() {
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [nome, setNome] = useState("");
@@ -18,7 +18,7 @@ export default function CadastroClientes() {
     setErro("");
 
     try {
-      const res = await fetch("http://localhost:4000/clientes", {
+      const res = await fetch(`${API}/clientes`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ nome, telefone }),

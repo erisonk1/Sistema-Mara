@@ -4,7 +4,7 @@ import { Poppins } from "next/font/google";
 import CadastroClientes from "./components/cliente/page";
 import { NomeInput } from "./components/files/NomeInput";
 
-const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
+const API = process.env.NEXT_PUBLIC_API_URL ?? "https://sistema-mara-backend-1.onrender.com";
 
 type ItemCardapio = {
   name: string;
@@ -200,7 +200,7 @@ export default function Home() {
                       onChange={setNome}
                       onSelectCliente={(cliente) => {
                         setNome(cliente.nome);
-                      setTelefone(String(cliente.telefone));
+                        setTelefone(String(cliente.telefone));
                         setIdCliente(cliente.id ?? null);
                       }}
                     />

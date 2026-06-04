@@ -10,7 +10,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { useRouter } from "next/navigation";
-
+const API = process.env.NEXT_PUBLIC_API_URL ?? "https://sistema-mara-backend-1.onrender.com";
 type Item = {
   nome: string;
   quantidade: number;
@@ -106,20 +106,20 @@ export default function Faturamento() {
   };
 
   useEffect(() => {
-    fetch("http://localhost:4000/faturamento/dias")
+    fetch(`${API}/faturamento/dias`)
       .then((r) => r.json())
       .then((data) =>
         setDados(Object.entries(data).map(([data, valor]) => ({ data, valor: valor as number })))
       );
-    fetch("http://localhost:4000/faturamento/mais-vendidos")
+    fetch(`${API}/faturamento/mais-vendidos`)
       .then((r) => r.json())
       .then(setRanking);
   }, []);
 
   useEffect(() => {
     const url = dataFiltro
-      ? `http://localhost:4000/comandas/periodo/${dataFiltro}`
-      : "http://localhost:4000/comandas";
+      ? `${API}/comandas/periodo/${dataFiltro}`
+      : `${API}/comandas`;
     fetch(url)
       .then((r) => r.json())
       .then(setComandas)
@@ -167,7 +167,7 @@ export default function Faturamento() {
 
   const excluirComanda = async (id: number) => {
     if (!window.confirm("Tem certeza que deseja excluir esta comanda?")) return;
-    await fetch(`http://localhost:4000/comandas/${id}`, { method: "DELETE" });
+    await fetch(`${API}/comandas/${id}`, { method: "DELETE" });
     setComandas((prev) => prev.filter((c) => c.id !== id));
   };
 
@@ -307,7 +307,7 @@ export default function Faturamento() {
                 <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
                 <XAxis dataKey="data" stroke="#94a3b8" tick={{ fontSize: 11 }} />
                 <YAxis stroke="#94a3b8" tick={{ fontSize: 11 }} />
-                 <Tooltip
+                <Tooltip
                   contentStyle={{ borderRadius: "10px", border: "1px solid #e2e8f0", fontSize: "13px" }}
                  formatter={(v) => [`R$ ${Number(v ?? 0).toFixed(2)}`, "Valor"]}
                   labelFormatter={(l) => `Data: ${l}`}

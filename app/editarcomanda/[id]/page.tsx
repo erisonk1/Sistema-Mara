@@ -6,7 +6,7 @@ import { Poppins } from "next/font/google";
 import { CategoriaCardapio, FormaPagamento } from "@/app/components/files/comanda";
 import { PageHeader } from "@/app/components/files/PageHeader";
 import { PaymentSelector, FORMAS_PAGAMENTO } from "@/app/components/files/PaymentSelector";
-
+const API = process.env.NEXT_PUBLIC_API_URL ?? "https://sistema-mara-backend-1.onrender.com";
 // ─── Helpers (shared entre criar e editar) ────────────────────────────────────
 // Idealmente esses helpers ficam em utils/comanda.ts e são importados aqui e no Home.tsx
 
@@ -48,7 +48,7 @@ export default function EditarComanda() {
 
   // ── Buscar cardápio ──────────────────────────────────────────────────────────
   useEffect(() => {
-    fetch("http://localhost:4000/cardapio")
+    fetch(`${API}/cardapio`)
       .then((r) => r.json())
       .then((data) =>
         setMenu(
@@ -68,7 +68,7 @@ export default function EditarComanda() {
   // ── Buscar comanda ───────────────────────────────────────────────────────────
   useEffect(() => {
     if (!id) return;
-    fetch(`http://localhost:4000/comandas/${id}`)
+    fetch(`${API}/comandas/${id}`)
       .then((r) => r.json())
       .then((data) => {
         setNome(data.nome);
@@ -167,7 +167,7 @@ export default function EditarComanda() {
     };
 
     try {
-      const response = await fetch(`http://localhost:4000/comandas/${id}`, {
+      const response = await fetch(`${API}/comandas/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(comanda),

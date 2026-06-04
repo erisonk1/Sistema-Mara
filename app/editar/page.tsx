@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { PageHeader } from "@/app/components/files/PageHeader";
 import { SectionCard } from "@/app/components/files/SectionCard";
-
+const API = process.env.NEXT_PUBLIC_API_URL ?? "https://sistema-mara-backend-1.onrender.com";
 type Item = {
   id?: number;
   name: string;
@@ -29,7 +29,7 @@ export default function Editar() {
   const [expandedCats, setExpandedCats] = useState<Record<number, boolean>>({});
 
   const reloadMenu = async () => {
-    const res = await fetch("http://localhost:4000/cardapio");
+    const res = await fetch(`${API}/cardapio`);
     const data = await res.json();
     setMenu(data);
   };
@@ -70,7 +70,7 @@ export default function Editar() {
     }
 
     try {
-      await fetch("http://localhost:4000/itens", {
+      await fetch(`${API}/itens`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ categoria_id: categoriaId, nome, preco, available, porPeso }),
@@ -89,7 +89,7 @@ export default function Editar() {
   const addCategory = async () => {
     if (!newCategoryName.trim()) return;
     try {
-      await fetch("http://localhost:4000/categorias", {
+      await fetch(`${API}/categorias`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ nome: newCategoryName }),
@@ -104,7 +104,7 @@ export default function Editar() {
   const deleteCategory = async (id: number) => {
     if (!window.confirm("Excluir esta categoria e todos os seus itens?")) return;
     try {
-      await fetch(`http://localhost:4000/categorias/${id}`, { method: "DELETE" });
+      await fetch(`${API}/categorias/${id}`, { method: "DELETE" });
       setMenu((prev) => prev.filter((c) => c.id !== id));
     } catch (err) {
       console.error(err);
@@ -114,7 +114,7 @@ export default function Editar() {
   const removeItem = async (catIndex: number, itemIndex: number) => {
     const item = menu[catIndex].items[itemIndex];
     try {
-      const res = await fetch(`http://localhost:4000/itens/${item.id}`, { method: "DELETE" });
+      const res = await fetch(`${API}/itens/${item.id}`, { method: "DELETE" });
       if (!res.ok) throw new Error();
       setMenu((prev) =>
         prev.map((cat, i) =>
@@ -131,13 +131,13 @@ export default function Editar() {
     setSaving(true);
     try {
       for (const categoria of menu) {
-        await fetch(`http://localhost:4000/categorias/${categoria.id}`, {
+        await fetch(`${API}/categorias/${categoria.id}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(categoria),
         });
         for (const item of categoria.items) {
-          await fetch(`http://localhost:4000/itens/${item.id}`, {
+          await fetch(`${API}/itens/${item.id}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
