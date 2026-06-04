@@ -307,9 +307,10 @@ export default function Faturamento() {
                 <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
                 <XAxis dataKey="data" stroke="#94a3b8" tick={{ fontSize: 11 }} />
                 <YAxis stroke="#94a3b8" tick={{ fontSize: 11 }} />
-                <Tooltip
+                 <Tooltip
                   contentStyle={{ borderRadius: "10px", border: "1px solid #e2e8f0", fontSize: "13px" }}
-                  formatter={(v: number) => [`R$ ${v.toFixed(2)}`, "Valor"]}
+                 formatter={(v) => [`R$ ${Number(v ?? 0).toFixed(2)}`, "Valor"]}
+                  labelFormatter={(l) => `Data: ${l}`}
                 />
                 <Area type="monotone" dataKey="valor" stroke="#f43f5e" strokeWidth={2.5} fill="url(#grad)" dot={false} activeDot={{ r: 5 }} />
               </AreaChart>
