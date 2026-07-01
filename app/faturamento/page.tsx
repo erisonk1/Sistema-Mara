@@ -97,7 +97,7 @@ export default function Faturamento() {
   const PER = 5;
 
   const router = useRouter();
-  const senhaCorreta = "ln102030";
+  const senhaCorreta = "1234";
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
