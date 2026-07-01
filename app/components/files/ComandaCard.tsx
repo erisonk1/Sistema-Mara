@@ -1,14 +1,6 @@
 // components/comanda/ComandaCard.tsx
 // Card de visualização de uma comanda: cabeçalho com status/total, lista de itens,
 // troca de status e ações de impressão/edição/exclusão.
-// Uso:
-// <ComandaCard
-//   comanda={comanda}
-//   itensSelecionados={itensSelecionados}
-//   onToggleItem={toggleItemSelecionado}
-//   onStatusChange={handleStatusChange}
-//   onExcluir={excluirComanda}
-// />
 
 import { useRouter } from "next/navigation";
 import { Comanda } from "@/app/components/files/comanda";
@@ -24,6 +16,8 @@ type ComandaCardProps = {
   onStatusChange: (comandaId: number, novoStatus: Comanda["status"]) => void;
   onExcluir: (id: number) => void;
   reload: () => void;
+  statusCarregando?: boolean;
+  statusSucesso?: boolean;
 };
 
 function calcularTotal(comanda: Comanda): number {
@@ -40,6 +34,8 @@ export function ComandaCard({
   onStatusChange,
   onExcluir,
   reload,
+  statusCarregando = false,
+  statusSucesso = false,
 }: ComandaCardProps) {
   const router = useRouter();
   const total = calcularTotal(comanda);
@@ -82,10 +78,20 @@ export function ComandaCard({
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t border-gray-100">
           <div className="flex items-center gap-2">
             <span className="text-xs font-semibold text-gray-500">Status:</span>
-            <StatusToggle status={comanda.status} onChange={(s) =>{
-              onStatusChange(comanda.id, s)
-              reload()}
-            } />
+            <StatusToggle
+              status={comanda.status}
+              onChange={(s) => {
+                onStatusChange(comanda.id, s);
+                reload();
+              }}
+              disabled={statusCarregando}
+            />
+            {statusCarregando && (
+              <div className="w-4 h-4 rounded-full border-2 border-gray-300 border-t-gray-600 animate-spin" />
+            )}
+            {statusSucesso && !statusCarregando && (
+              <span className="text-xs text-emerald-600 font-semibold animate-pulse">✓ Salvo</span>
+            )}
           </div>
           <div className="flex flex-wrap gap-2">
             <button
