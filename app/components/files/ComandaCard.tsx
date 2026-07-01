@@ -1,7 +1,5 @@
 // components/comanda/ComandaCard.tsx
-// Card de visualização de uma comanda: cabeçalho com status/total, lista de itens,
-// troca de status e ações de impressão/edição/exclusão.
-
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Comanda } from "@/app/components/files/comanda";
 import { Badge } from "@/app/components/files/Badge";
@@ -40,19 +38,33 @@ export function ComandaCard({
   const router = useRouter();
   const total = calcularTotal(comanda);
 
+  // Status local para atualização otimista de cor/visual imediata
+  const [statusLocal, setStatusLocal] = useState<Comanda["status"]>(comanda.status);
+
+  // Sincroniza se o servidor retornar um valor diferente (ex: erro revertido)
+  useEffect(() => {
+    setStatusLocal(comanda.status);
+  }, [comanda.status]);
+
+  const handleStatusClick = (s: Comanda["status"]) => {
+    setStatusLocal(s);
+    onStatusChange(comanda.id, s);
+    reload();
+  };
+
   return (
     <div
       className={`bg-white rounded-2xl border shadow-sm overflow-hidden transition-all ${
-        comanda.status === "Concluído" ? "border-emerald-100 opacity-80" : "border-gray-200"
+        statusLocal === "Concluído" ? "border-emerald-100 opacity-80" : "border-gray-200"
       }`}
     >
       <div
         className={`px-5 py-3 flex items-center justify-between gap-3 border-b ${
-          comanda.status === "Pendente" ? "border-amber-100 bg-amber-50" : "border-emerald-100 bg-emerald-50"
+          statusLocal === "Pendente" ? "border-amber-100 bg-amber-50" : "border-emerald-100 bg-emerald-50"
         }`}
       >
         <div className="flex items-center gap-2.5 min-w-0">
-          <Badge status={comanda.status} />
+          <Badge status={statusLocal} />
           <h2 className="font-bold text-gray-900 text-sm truncate">{comanda.nome}</h2>
           <span className="text-xs text-gray-400 font-mono shrink-0">#{comanda.id}</span>
         </div>
@@ -79,11 +91,8 @@ export function ComandaCard({
           <div className="flex items-center gap-2">
             <span className="text-xs font-semibold text-gray-500">Status:</span>
             <StatusToggle
-              status={comanda.status}
-              onChange={(s) => {
-                onStatusChange(comanda.id, s);
-                reload();
-              }}
+              status={statusLocal}
+              onChange={handleStatusClick}
               disabled={statusCarregando}
             />
             {statusCarregando && (
