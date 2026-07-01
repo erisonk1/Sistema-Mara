@@ -15,6 +15,8 @@ export default function Ver() {
     soundEnabled,
     ativarSom,
     recarregar,
+    statusCarregando,
+    statusSucesso,
   } = useComandas();
 
   return (
@@ -41,7 +43,6 @@ export default function Ver() {
       </header>
 
       <main className="max-w-5xl mx-auto px-4 sm:px-6 py-6">
-
         {erro && (
           <div className="mb-5 flex items-center justify-between gap-3 px-4 py-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm font-medium">
             <span>{erro}</span>
@@ -75,6 +76,8 @@ export default function Ver() {
               onStatusChange={handleStatusChange}
               onExcluir={excluirComanda}
               reload={recarregar}
+              statusCarregando={statusCarregando === comanda.id}
+              statusSucesso={statusSucesso === comanda.id}
             />
           ))}
         </div>

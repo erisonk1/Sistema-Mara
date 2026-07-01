@@ -1,7 +1,7 @@
 // hooks/useComandas.ts
 // Hook que centraliza dados, filtro por data e ações (status, salvar, excluir) das comandas do dia.
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Comanda } from "@/app/components/files/comanda";
 
@@ -22,12 +22,21 @@ async function parseErroApi(res: Response, fallback: string): Promise<string> {
   }
 }
 
+/** Garante "YYYY-MM-DD" a partir de uma string ISO completa ou já curta. */
+function paraDataCurta(valor: string): string {
+  return valor.length >= 10 ? valor.slice(0, 10) : valor;
+}
 
 export function useComandas() {
   const [comandas, setComandas] = useState<Comanda[]>([]);
   const [itensSelecionados, setItensSelecionados] = useState<Record<string, boolean>>({});
   const [soundEnabled, setSoundEnabled] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
+  const [statusCarregando, setStatusCarregando] = useState<number | null>(null);
+  const [statusSucesso, setStatusSucesso] = useState<number | null>(null);
+
+  const [dataFiltro, setDataFiltro] = useState("");
+  const [mostrarTudo, setMostrarTudo] = useState(true);
 
   const prevIdsRef = useRef<string>("");
 
@@ -50,27 +59,33 @@ export function useComandas() {
   }, []);
 
   // Detecta comandas novas para notificar, e sincroniza o estado local com o que veio do servidor.
-useEffect(() => {
-  const novaLista = data as Comanda[];
-  const newIds = novaLista.map((c) => c.id).join(",");
+  useEffect(() => {
+    const novaLista = data as Comanda[];
+    const newIds = novaLista.map((c) => c.id).join(",");
+    if (newIds === prevIdsRef.current) return;
 
-  // notificação só quando aparecem IDs novos
-  if (newIds !== prevIdsRef.current) {
     const novas = novaLista.filter((c) => !comandas.some((old) => old.id === c.id));
 
+    // prevIdsRef.current === "" só na primeira carga: não notifica o que já existia ao abrir a página.
     if (novas.length > 0 && prevIdsRef.current !== "") {
       mostrarToastNovaComanda(novas[0].nome);
       playNotificationSound();
     }
 
     prevIdsRef.current = newIds;
-  }
+    setComandas(novaLista);
+    // comandas é intencionalmente omitido: só queremos comparar contra o snapshot anterior, não re-rodar a cada setComandas.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, playNotificationSound]);
 
-  // sempre sincroniza (captura mudanças de status, itens, etc.)
-  setComandas(novaLista);
+  const comandasFiltradas = useMemo(() => {
+    if (mostrarTudo || !dataFiltro) return comandas;
+    return comandas.filter((c) => {
+      if (!c.criadoEm) return true; // sem data no registro: não esconde o item
+      return paraDataCurta(c.criadoEm) === dataFiltro;
+    });
+  }, [comandas, mostrarTudo, dataFiltro]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-}, [data, playNotificationSound]);
   const toggleItemSelecionado = useCallback(
     (comandaId: number, itemIndex: number, checked: boolean) => {
       setItensSelecionados((prev) => ({ ...prev, [`${comandaId}-${itemIndex}`]: checked }));
@@ -83,6 +98,8 @@ useEffect(() => {
       const comanda = comandas.find((c) => c.id === comandaId);
       if (!comanda) return;
       setErro(null);
+      setStatusCarregando(comandaId);
+      setStatusSucesso(null);
       try {
         const res = await fetch(`${API}/comandas/${comandaId}`, {
           method: "PUT",
@@ -93,10 +110,14 @@ useEffect(() => {
           setErro(await parseErroApi(res, "Não foi possível atualizar o status."));
           return;
         }
+        setStatusSucesso(comandaId);
+        setTimeout(() => setStatusSucesso(null), 2500);
         refetch();
       } catch (err) {
         console.error(err);
         setErro("Não foi possível atualizar o status. Verifique sua conexão.");
+      } finally {
+        setStatusCarregando(null);
       }
     },
     [comandas, refetch]
@@ -133,6 +154,8 @@ useEffect(() => {
     soundEnabled,
     ativarSom,
     recarregar: refetch,
+    statusCarregando,
+    statusSucesso,
   };
 }
 
