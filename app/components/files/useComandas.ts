@@ -165,5 +165,5 @@ function mostrarToastNovaComanda(nome: string) {
   el.className =
     "fixed top-4 right-4 bg-emerald-500 text-white px-5 py-3 rounded-2xl shadow-xl z-50 text-sm font-semibold animate-bounce";
   document.body.appendChild(el);
-  setTimeout(() => el.remove(), 4000);
+  setTimeout(() => el.remove(), 1000);
 }
