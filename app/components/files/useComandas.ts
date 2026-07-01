@@ -43,7 +43,7 @@ export function useComandas() {
   const { data = [], isLoading, refetch } = useQuery({
     queryKey: ["comandasHoje"],
     queryFn: fetchComandasHoje,
-    refetchInterval: 5000,
+    refetchInterval: 1000,
   });
 
   const playNotificationSound = useCallback(() => {
