@@ -6,16 +6,18 @@ type Status = "Pendente" | "Concluído";
 type StatusToggleProps = {
   status: Status;
   onChange: (status: Status) => void;
+  disabled?: boolean;
 };
 
-export function StatusToggle({ status, onChange }: StatusToggleProps) {
+export function StatusToggle({ status, onChange, disabled = false }: StatusToggleProps) {
   return (
-    <div className="flex rounded-xl overflow-hidden border border-gray-200">
+    <div className={`flex rounded-xl overflow-hidden border border-gray-200 ${disabled ? "opacity-50 pointer-events-none" : ""}`}>
       {(["Pendente", "Concluído"] as const).map((s) => (
         <button
           key={s}
           type="button"
           onClick={() => onChange(s)}
+          disabled={disabled}
           className={`px-3 py-1.5 text-xs font-semibold transition-colors ${
             status === s
               ? s === "Pendente"
